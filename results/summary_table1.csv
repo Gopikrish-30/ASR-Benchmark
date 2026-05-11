@@ -1,0 +1,5 @@
+﻿Model,Type,Entity Acc ↑ (self),Normalized Eval,WER ↓ (GramVaani),CER ↓ (GramVaani),Avg Latency (s),Cost/hr audio
+Deepgram Nova-2,API,35.0%,Yes,34.5%,19.0%,1.01,$2.16/hr
+Sarvam AI Saaras v3,API,75.0%,Yes,38.8%,25.2%,2.31,~₹30/hr
+Whisper large-v3,Local GPU,80.0%,Yes,49.6%,23.1%,6.97,Free (GPU)
+Whisper Hindi FT,Local GPU,45.0%,Yes,24.5%,12.2%,22.88,Free (GPU)

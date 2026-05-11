@@ -1,0 +1,34 @@
+﻿Model,Condition,Locality,Reference,Prediction,Normalized Prediction,Latency (s),Failure Type
+deepgram,quiet,Marathahalli,main marathahalli mein rehta hoon bridge ke paas wala area,मैं मारता हूं ब्रिज के पास वाला area है,maim marata hum brija ke pasa vala area hai,1.15,entity_miss
+deepgram,noisy,Hebbal,main hebbal flyover ke paas hoon abhi traffic mein hoon,मैं cheaple flyover के पास हूं ना भी traffic में हूं,maim cheaple flyover ke pasa hum na bhi traffic mem hum,0.36,entity_miss
+deepgram,noisy,Yelahanka,yelahanka new town mein ek room chahiye budget kam hai,ऐलान का new town main ये room चाहिए budget कम है,ailana ka new town main ye room chahie budget kama hai,1.8,entity_miss
+deepgram,noisy,Banashankari,banashankari mein rehti hoon temple ke paas wala area,बनासांगड़ी में रहते होन टेंपो के पास वाला area,banasamga di mem rahate hona tempo ke pasa vala area,0.51,entity_miss
+deepgram,rushed,HSR Layout,hsr layout second sector mein hoon jaldi batao,अरे अरे अरे अरे अच्छा sir ले और second sector में हो जल्दी जल्दी बैठो,are are are are achcha sir le aura second sector mem ho jaldi jaldi baitho,0.38,entity_miss
+deepgram,rushed,BTM Layout,btm layout se silk board kitna door hai bhai jaldi,video में और यह सिर्फ board कितना डोर है भाई जल्दी,video mem aura yaha sirpha board kitana dora hai bhai jaldi,0.7,entity_miss
+deepgram,rushed,Majestic,majestic bus stand pe hoon bus nikal jaayegi,दूसरी bus stand पर हो हम bus निकल जाएगी,dusari bus stand para ho hama bus nikala jaegi,1.72,entity_miss
+deepgram,rushed,Bellandur,bellandur mein hoon cab book karo jaldi please,bellender main ho on cab book kar ho जल्दी please please please please,bellender main ho on cab book kar ho jaldi please please please please,3.89,entity_miss
+deepgram,whisper,Sarjapur,sarjapur road pe ek pg dhundh raha hoon affordable chahiye,sir जयपुर road पर यह page और धूम रहा हूं affordable चाहिए,sir jayapura road para yaha page aura dhuma raha hum affordable chahie,1.11,entity_miss
+deepgram,whisper,Bommanahalli,bommanahalli mein rehta hoon kaam ke liye apply karna tha,हमारे में रहता हूं काम के लिए अप्रे करना था,hamare mem rahata hum kama ke lie apre karana tha,0.35,entity_miss
+deepgram,whisper,KR Puram,kr puram station ke paas hoon koi job hai kya paas mein,kb g b gm station के पास हूँ कोई जवाब है क्या पास में,kb g b gm station ke pasa hu n koi javaba hai kya pasa mem,1.53,entity_miss
+deepgram,whisper,Peenya,peenya industrial area mein supervisor ka kaam chahiye,बेनियाई testल area में एक supervisor का काम चाहिए,beniyai testla area mem eka supervisor ka kama chahie,1.43,entity_miss
+deepgram,whisper,Yeshwanthpur,yeshwanthpur se koi factory job milegi kya experience hai,यह श्रुतिपुर से कोई factory job मिलेंगे क्या experience है,yaha shrutipura se koi factory job milemge kya experience hai,0.74,entity_miss
+sarvam,noisy,Yelahanka,yelahanka new town mein ek room chahiye budget kam hai,"इलाहन का न्यू टाउन में एक रूम चाहिए, बजट कम है।",ilahana ka nyu tauna mem eka ruma chahie bajata kama hai|,2.08,entity_miss
+sarvam,rushed,Majestic,majestic bus stand pe hoon bus nikal jaayegi,"दूसरी बस स्टैंड पे हो हम, बस निकल जाएगी।",dusari basa staimda pe ho hama basa nikala jaegi|,2.12,entity_miss
+sarvam,rushed,Bellandur,bellandur mein hoon cab book karo jaldi please,"वेलोंदूर मेन हॉन, क्या बुक कर दो जल्दी प्लीज प्लीज प्लीज प्लीज प्लीज प्लीज।",velomdura mena haॉna kya buka kara do jaldi plija plija plija plija plija plija|,3.16,entity_miss
+sarvam,whisper,Bommanahalli,bommanahalli mein rehta hoon kaam ke liye apply karna tha,"वह माली में रहता हूँ, काम के लिए अप्लाई करना था।",vaha mali mem rahata hu n kama ke lie aplai karana tha|,2.56,entity_miss
+sarvam,whisper,KR Puram,kr puram station ke paas hoon koi job hai kya paas mein,"कैपी फार्म स्टेशन के पास हूँ, कोई जॉब है क्या पास में?",kaipi pharma steshana ke pasa hu n koi jaॉba hai kya pasa mem,2.23,entity_miss
+whisper,rushed,Majestic,majestic bus stand pe hoon bus nikal jaayegi,"यूजडिक बस्टेन पे हो हम, बस निकल जाईगे",yujadika bastena pe ho hama basa nikala jaige,2.24,entity_miss
+whisper,whisper,Bommanahalli,bommanahalli mein rehta hoon kaam ke liye apply karna tha,"मुमा एलिमेन रहता हूँ, काम के लिए अप्लेई करना था।",muma elimena rahata hu n kama ke lie aplei karana tha|,2.67,entity_miss
+whisper,whisper,KR Puram,kr puram station ke paas hoon koi job hai kya paas mein,"केपी भूम स्टेशन के पास हूँ, कोई जाव है इके अपास में",kepi bhuma steshana ke pasa hu n koi java hai ike apasa mem,2.75,entity_miss
+whisper,whisper,Yeshwanthpur,yeshwanthpur se koi factory job milegi kya experience hai,यह श्रुन्तपूर्ज एक विफाक्री जाओ में लिंगे क्या एक्स्पिरियंस है?,yaha shruntapurja eka viphakri jao mem limge kya ekspiriyamsa hai,3.45,entity_miss
+indicwhisper,quiet,Koramangala,haan bhai main koramangala mein rehta hoon kab aana hai,हां भाई में मंगला में रहता हूं क्या बना है,ham bhai mem mamgala mem rahata hum kya bana hai,7.26,entity_miss
+indicwhisper,quiet,Marathahalli,main marathahalli mein rehta hoon bridge ke paas wala area,मैं माली में रहता हूं ब्रिज के पास वाला एरिया,maim mali mem rahata hum brija ke pasa vala eriya,8.35,entity_miss
+indicwhisper,noisy,Hebbal,main hebbal flyover ke paas hoon abhi traffic mein hoon,मैं प्लेयर के पास हूं अभी ट्रैफिक में हूं,maim pleyara ke pasa hum abhi traiphika mem hum,6.82,entity_miss
+indicwhisper,noisy,Yelahanka,yelahanka new town mein ek room chahiye budget kam hai,"इलाहन का न्यू टाउन में नेक रूम चाहिए, बजट कम है",ilahana ka nyu tauna mem neka ruma chahie bajata kama hai,8.33,entity_miss
+indicwhisper,rushed,HSR Layout,hsr layout second sector mein hoon jaldi batao,सेकंड सेक्टर में जल्दी जल्दी,sekamda sektara mem jaldi jaldi,8.82,entity_miss
+indicwhisper,rushed,Majestic,majestic bus stand pe hoon bus nikal jaayegi,बस निकल जाएगी,basa nikala jaegi,5.3,entity_miss
+indicwhisper,rushed,Silk Board,silk board junction pe jam hai late ho raha hoon,जंक्शन भी जाम है लेट होना हो,jamkshana bhi jama hai leta hona ho,4.88,entity_miss
+indicwhisper,rushed,Bellandur,bellandur mein hoon cab book karo jaldi please,बैंड में हो क्या बुक करो जल्दी प्लीज प्लीज प्लीज प्लीज प्लीज,baimda mem ho kya buka karo jaldi plija plija plija plija plija,10.99,entity_miss
+indicwhisper,whisper,Bommanahalli,bommanahalli mein rehta hoon kaam ke liye apply karna tha,काम के लिए अप्लाई करना था,kama ke lie aplai karana tha,7.37,entity_miss
+indicwhisper,whisper,KR Puram,kr puram station ke paas hoon koi job hai kya paas mein,केपीब्रहम स्टेशन के पास हूँ। कोई जाब है के आपास में।,kepibrahama steshana ke pasa hu n| koi jaba hai ke apasa mem|,9.45,entity_miss
+indicwhisper,whisper,Yeshwanthpur,yeshwanthpur se koi factory job milegi kya experience hai,क्या एक्सपीरियंस है,kya eksapiriyamsa hai,6.32,entity_miss

@@ -1,0 +1,236 @@
+# ASR Shootout - Indian Conversational Speech Benchmark
+
+A full end-to-end benchmark of four ASR systems for Indian Hindi/Hinglish telephony speech, with a primary focus on correctly extracting Bangalore locality names (entity accuracy). This project evaluates cloud APIs and open-source models across noisy real-world conditions and provides reproducible metrics, charts, and failure analysis.
+
+## Project Summary
+
+This benchmark is designed for the Vahan hiring platform use case, where candidates speak Hindi/Hinglish over phone calls from noisy environments. The system must correctly capture the locality name from a sentence (the most important entity for downstream routing and matching).
+
+**Models evaluated**
+- Deepgram Nova-2 (cloud API)
+- Sarvam AI Saaras v3 (cloud API)
+- Whisper large-v3 (open-source)
+- Whisper Hindi fine-tune (IndicWhisper proxy)
+
+**Primary metric**
+- Entity Accuracy (self-recorded): Did the model capture the Bangalore locality name?
+
+**Secondary metrics**
+- WER and CER (GramVaani telephony)
+- Inference latency per file
+
+## Architecture (End to End)
+
+1. **Dataset ingestion**
+  Load the ground truth CSV, normalize column names, and fill missing locality values for non-entity samples.
+
+2. **Path resolution and validation**
+  For each row, resolve the audio path by matching the file stem to an actual audio file (mp3, wav, or m4a). Missing audio paths are surfaced early.
+
+3. **Audio preparation and caching**
+  Convert all audio to 16 kHz mono WAV. Cache outputs under `wav_cache` so repeated runs are fast and consistent.
+
+4. **Duration checks**
+  Compute duration from WAV headers and flag any files near model limits (Sarvam has a 30s request limit).
+
+5. **Inference layer**
+  A unified interface is used for all models: `run_<model>(wav_path) -> (transcript, latency)`. API models include retries and backoff; local models are loaded once and reused.
+
+6. **Checkpointed execution**
+  Each model writes a checkpoint every 10 files, allowing safe resume after interruptions. Final outputs are written per model and consolidated.
+
+7. **Normalization and scoring**
+  Apply transliteration-aware normalization and compute entity accuracy and WER/CER for the correct track.
+
+8. **Aggregation and reporting**
+  Produce combined raw outputs, metrics, summary tables, failure analysis, and charts for model comparison.
+
+## Datasets
+
+**Track A - Self-recorded Hinglish (primary)**
+- 20 files, recorded on a phone mic with natural code-switching
+- Four acoustic conditions: quiet, noisy, rushed, whisper
+- Each sentence contains a Bangalore locality name used for entity accuracy
+
+**Track B - GramVaani telephony (secondary)**
+- 96 files of real telephony Hindi speech
+- Reference transcripts included for WER and CER
+
+**Ground truth**
+- [Dataset/final_116_clean.csv](Dataset/final_116_clean.csv)
+
+**Key columns used in the pipeline**
+- `file`, `source`, `condition`, `locality`, `reference`, `audio_path`, `wav_path`, `dur_s`
+
+**Preprocessing steps**
+- Normalize column names and fill missing locality values with `N/A`
+- Fix known filename mismatches
+- Resolve file paths for mp3, wav, and m4a
+- Convert to 16 kHz mono WAV and compute duration
+
+## Repository Structure
+
+```
+.
+├── asr_benchmark_report.md
+├── ASR_Shootout_Project_Plan.md
+├── asr-benchmark-final.ipynb
+├── Audio-files/
+│   └── gramvaani_audio/
+├── Dataset/
+│   └── final_116_clean.csv
+├── results/
+│   ├── all_results_raw.csv
+│   ├── all_results_metrics.csv
+│   ├── summary_table1.csv
+│   ├── entity_failures.csv
+│   └── charts/
+│       ├── 00_dataset_eda.png
+│       ├── 01_entity_accuracy.png
+│       ├── 02_wer_cer.png
+│       ├── 03_latency.png
+│       ├── 04_entity_by_condition.png
+│       ├── 05_wer_heatmap.png
+│       ├── 06_locality_heatmap.png
+│       ├── 07_radar.png
+│       └── 08_wer_distribution.png
+└── README.md
+```
+
+## Approach
+
+- **Dual-track evaluation**
+  - Self-recorded track for entity accuracy
+  - GramVaani track for WER/CER at scale
+
+- **Script-agnostic evaluation**
+  - Models output Hindi in Devanagari or Roman
+  - Transliteration and normalization align both to a common Roman form
+
+- **Entity matching strategy**
+  1. Direct match on normalized output
+  2. Variant match using curated locality variants
+  3. Fuzzy match (partial ratio) for phonetic drift
+
+- **Checkpointed inference**
+  - Per-model checkpoints for safe resume
+  - Combined raw results in [results/all_results_raw.csv](results/all_results_raw.csv)
+
+## Metrics and Normalization Logic
+
+**Normalization pipeline**
+- Detect Devanagari characters and transliterate to Roman ITRANS
+- Lowercase and strip punctuation
+- Collapse repeated whitespace
+
+**Entity accuracy (Track A)**
+- Direct match on normalized hypothesis
+- Variant match using curated locality variants
+- Fuzzy match (partial ratio) to handle phonetic drift
+
+**WER and CER (Track B)**
+- Computed only on GramVaani rows with references
+- Uses normalized Roman text to avoid script mismatch bias
+- Missing hypotheses are assigned WER and CER of 1.0
+
+## Tech Stack
+
+- **Python**: core pipeline, evaluation logic
+- **Pandas / NumPy**: data processing
+- **Whisper**: open-source inference
+- **Transformers (HuggingFace)**: IndicWhisper proxy
+- **Deepgram SDK**: Nova-2 API
+- **Requests**: Sarvam API
+- **jiwer**: WER/CER computation
+- **indic-transliteration**: Devanagari to Roman normalization
+- **matplotlib / seaborn**: charts
+- **rapidfuzz**: entity matching
+
+## Key Results (Summary Table)
+
+From [results/summary_table1.csv](results/summary_table1.csv):
+
+- **Entity Accuracy (self)**
+  - Whisper large-v3: 80.0%
+  - Sarvam Saaras v3: 75.0%
+  - IndicWhisper: 45.0%
+  - Deepgram Nova-2: 35.0%
+
+- **WER/CER (GramVaani telephony)**
+  - IndicWhisper: 24.5% WER / 12.2% CER (best WER/CER)
+  - Deepgram Nova-2: 34.5% WER / 19.0% CER
+  - Sarvam Saaras v3: 38.8% WER / 25.2% CER
+  - Whisper large-v3: 49.6% WER / 23.1% CER
+
+- **Latency (avg per file)**
+  - Deepgram: 1.01s
+  - Sarvam: 2.31s
+  - Whisper: 6.97s
+  - IndicWhisper: 22.88s
+
+## Key Insights
+
+- **Best locality extraction**: Whisper large-v3 leads on entity accuracy; Sarvam is close and more telephony-optimized.
+- **Best transcription fidelity**: IndicWhisper leads on WER/CER for telephony Hindi, but struggles with locality entity capture.
+- **Latency trade-off**: API models are significantly faster than local GPU inference.
+- **Noise sensitivity**: All models degrade in rushed and whisper conditions; entity failures cluster around complex locality names.
+
+## Failure Analysis and Risks
+
+**Failure analysis artifacts**
+- Entity-level failures and example hypotheses are captured in [results/entity_failures.csv](results/entity_failures.csv)
+
+**Common failure modes observed**
+- Entity substitutions for long Kannada-origin localities
+- Short fragments or partial outputs in noisy or whispered audio
+- Phonetic drift in fast speech, even when the intent is correct
+
+**Risks and limitations**
+- **Small primary set**: The self-recorded dataset is only 20 files, so entity accuracy can swing with a few errors.
+- **API availability**: Cloud models can fail or return empty output; missing hypotheses inflate WER/CER if not separately reported.
+- **Script mismatch bias**: Without transliteration normalization, WER/CER would unfairly penalize models emitting Devanagari.
+- **Latency comparability**: API latency includes network round-trip; local latency is GPU inference time only.
+
+## Charts (Highlights)
+
+### Dataset Overview
+![Dataset EDA](results/charts/00_dataset_eda.png)
+
+### Entity Accuracy (Primary Metric)
+![Entity Accuracy](results/charts/01_entity_accuracy.png)
+
+### WER and CER Comparison
+![WER and CER](results/charts/02_wer_cer.png)
+
+### Latency Comparison
+![Latency](results/charts/03_latency.png)
+
+### Entity Accuracy by Condition
+![Entity by Condition](results/charts/04_entity_by_condition.png)
+
+### WER Heatmap by Condition
+![WER Heatmap](results/charts/05_wer_heatmap.png)
+
+### Locality Accuracy Heatmap
+![Locality Heatmap](results/charts/06_locality_heatmap.png)
+
+### Multi-Metric Radar
+![Radar](results/charts/07_radar.png)
+
+### WER Distribution
+![WER Distribution](results/charts/08_wer_distribution.png)
+
+## Files to Review
+
+- End-to-end notebook: [asr-benchmark-final.ipynb](asr-benchmark-final.ipynb)
+- Full write-up: [asr_benchmark_report.md](asr_benchmark_report.md)
+- Project plan: [ASR_Shootout_Project_Plan.md](ASR_Shootout_Project_Plan.md)
+- Combined raw outputs: [results/all_results_raw.csv](results/all_results_raw.csv)
+- Metrics per file: [results/all_results_metrics.csv](results/all_results_metrics.csv)
+- Entity failures: [results/entity_failures.csv](results/entity_failures.csv)
+
+## Reproducibility Notes
+
+- The notebook uses a unified interface per model and checkpointed inference to handle long runs.
+- Metrics use transliteration-aware normalization to avoid script mismatch penalties.
+- This repository includes all outputs and charts so the results can be inspected without re-running.
