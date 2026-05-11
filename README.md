@@ -175,6 +175,15 @@ From [results/summary_table1.csv](results/summary_table1.csv):
 - **Latency trade-off**: API models are significantly faster than local GPU inference.
 - **Noise sensitivity**: All models degrade in rushed and whisper conditions; entity failures cluster around complex locality names.
 
+## Recommended Model by Use Case
+
+| Use Case | Recommended Model | Reason |
+|---|---|---|
+| Best locality/entity extraction | Whisper large-v3 | Highest entity accuracy |
+| Best Hindi transcription quality | IndicWhisper | Lowest WER/CER |
+| Fast real-time production system | Deepgram Nova-2 | Lowest latency |
+| Balanced production deployment | Sarvam Saaras v3 | Good entity accuracy and fast inference |
+
 ## Failure Analysis and Risks
 
 **Failure analysis artifacts**
